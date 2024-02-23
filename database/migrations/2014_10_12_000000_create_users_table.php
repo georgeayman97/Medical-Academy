@@ -18,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('mobile')->unique();
+            $table->string('year');
             $table->string('role')->default('student');
             $table->enum('status', [User::STATUS_REQUEST, User::STATUS_ACTIVE, User::STATUS_DISABLED])->default(User::STATUS_REQUEST);
             $table->timestamp('email_verified_at')->nullable();

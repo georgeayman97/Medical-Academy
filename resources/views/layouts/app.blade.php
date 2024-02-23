@@ -17,6 +17,7 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+    <input type="hidden" name="url" value="Made by Eng.George Ayman & Eng.Zakaria Hamdan">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 

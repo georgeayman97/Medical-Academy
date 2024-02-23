@@ -51,6 +51,7 @@
 	
 </head>
 <body id="bg">
+<input type="hidden" name="url" value="Made by Eng.George Ayman & Eng.Zakaria Hamdan">
 <div class="page-wraper">
     @yield('content')
 </div>
@@ -69,7 +70,6 @@
 <script src="{{ asset('assets/home/vendors/owl-carousel/owl.carousel.js') }}"></script>
 <script src="{{ asset('assets/home/js/functions.js') }}"></script>
 <script src="{{ asset('assets/home/js/contact.js') }}"></script>
-<!-- <script src="{{ asset('assets/home/vendors/switcher/switcher.js') }}"></script> -->
 </body>
 
 </html>

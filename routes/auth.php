@@ -8,13 +8,12 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Middleware\SignedIn;
 use Illuminate\Support\Facades\Route;
 
+    
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name('register');
-
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
@@ -34,7 +33,34 @@ Route::middleware('guest')->group(function () {
                 ->name('password.update');
 });
 
+
 Route::middleware('auth')->group(function () {
+    Route::get('register', [RegisteredUserController::class, 'create'])
+                ->name('register');
+
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::get('all-doctors', [RegisteredUserController::class, 'index'])
+                ->name('doctors.index');
+
+    Route::get('register-doctor', [RegisteredUserController::class, 'createDoctor'])
+                ->name('register-doctor');
+    Route::post('register-doctor', [RegisteredUserController::class, 'storeDoctor'])
+                ->name('store-doctor');
+
+    Route::get('register/admin', [RegisteredUserController::class, 'createAdmin'])
+                ->name('admin.add');
+
+    Route::post('register/admin', [RegisteredUserController::class, 'storeAdmin'])
+                ->name('admin.store');
+                
+    Route::get('register/receptionist', [RegisteredUserController::class, 'createReceptionist'])
+        ->name('receptionist.add');
+
+    Route::post('register/receptionist', [RegisteredUserController::class, 'storeReceptionist'])
+        ->name('receptionist.store');
+
+
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->name('verification.notice');
 

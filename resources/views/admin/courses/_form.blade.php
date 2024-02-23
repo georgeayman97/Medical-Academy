@@ -33,17 +33,59 @@
 				<p class="invalid-feedback">{{ $message }}</p>
 				@enderror
 			</div>
-			
-
+			@if(auth()->user()->role == 'admin')
 			<div class="form-group col-6">
-				<label class="col-form-label">Teacher name</label>
-				<div>
-					<input class="form-control @error('instructor_name') is-invalid @enderror" type="text" value="{{ old('instructor_name',$course->instructor_name)}}" name="instructor_name">
-				</div>
+				<label class="col-form-label" for="">Doctor name</label>
+				<select name="instructor_name" id="instructor_name" class="form-control @error('instructor_name') is-invalid @enderror">
+					<option value="">No Doctor</option>
+					@foreach($doctors as $doctor)
+					<option value="{{ $doctor->id }}" @if($doctor->id == old('instructor_name',$course->instructor_name)) selected @endif>{{ $doctor->name }}</option>
+					@endforeach
+				</select>
+				@error('instructor_name')
+				<p class="invalid-feedback">{{ $message }}</p>
+				@enderror
 			</div>
+			@endif
+			<div class="form-group col-3">
+				<label class="col-form-label" for="">Year</label>
+				<select name="course_year" id="course_year" class="form-control @error('course_year') is-invalid @enderror">
+					
+					@for($i=1 ; $i < 7 ; $i++ )
+					<option value="{{ $i }}" >{{ $i }}</option>
+					@endfor
+				</select>
+				@error('course_year')
+				<p class="invalid-feedback">{{ $message }}</p>
+				@enderror
+			</div>
+			<div class="form-group col-3">
+				<label class="col-form-label" for="">Status</label>
+				<select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
+					<option value="active" @if("disabled" == old('status',$course->status)) selected @endif>Active</option>
+					<option value="disabled" @if("disabled" == old('status',$course->status)) selected @endif>Disabled</option>
+				</select>
+				@error('subject_id')
+				<p class="invalid-feedback">{{ $message }}</p>
+				@enderror
+			</div>
+
 
 			<div class="form-group col-6">
 				<x-form-input labelClass="col-form-label" type="number" name="price" label="Price" :value="$course->price"/>
+			</div>
+
+			<div class="form-group col-6">
+				<label class="col-form-label" for="">Faculty/Subject name</label>
+				<select name="subject_id" id="subject_id" class="form-control @error('subject_id') is-invalid @enderror">
+					<option value="">No Subject</option>
+					@foreach($subjects as $subject)
+					<option value="{{ $subject->id }}" @if($subject->id == old('subject_id',$course->subject_id)) selected @endif>Faculty: {{optional($subject->faculty)->name}}<span> ||</span> Subject:{{ $subject->name }}</option>
+					@endforeach
+				</select>
+				@error('subject_id')
+				<p class="invalid-feedback">{{ $message }}</p>
+				@enderror
 			</div>
 
 			<div class="seperator"></div>

@@ -1,11 +1,12 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.admin')
 
+
+@section('content')
+
+<x-guest-layout>
+    
+        
+<div style="width: 60em; padding-left: 10em;">
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
@@ -24,6 +25,33 @@
                 <x-label for="email" :value="__('Email')" />
 
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="mobile" :value="__('Mobile')" />
+
+                <x-input id="mobile" class="block mt-1 w-full" type="number" name="mobile" :value="old('mobile')" required />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="year" :value="__('Year')" />
+                <select class="block w-full form-select mt-1" for="year" name="year">
+                    <option value="first year">First Year</option>
+                    <option value="second year">Second Year</option>
+                    <option value="third year">Third Year</option>
+                    <option value="fourth year">Fourth Year</option>
+                    <option value="fifth year">Fifth Year</option>
+                    <option value="six year">Six Year</option>
+                </select>
+            </div>
+
+            <div class="mt-4">
+                <x-label for="faculty_id" :value="__('Faculty')" />
+                <select class="block w-full form-select mt-1" for="faculty_id" name="faculty_id">
+                    @foreach($faculties as $faculty)
+                    <option value="{{$faculty->id}}">{{$faculty->name}}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Password -->
@@ -46,14 +74,12 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
 
                 <x-button class="ml-4">
-                    {{ __('Register') }}
+                    {{ __('Register Student') }}
                 </x-button>
             </div>
         </form>
-    </x-auth-card>
+        </div>
 </x-guest-layout>
+@endsection

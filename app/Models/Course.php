@@ -19,21 +19,41 @@ class Course extends Model
         'instructor_name',
         'image_path',
         'description',
+        'course_year',
         'status',
         'price',
+        'subject_id'
     ];
+
+    public function CourseAccesses(){
+        return $this->hasMany(CourseAccess::class,'course_id','id');
+    }
+
+    // protected $with =['CourseAccesses'];
 
     public function Sessions(){
         return $this->hasMany(Session::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class,'course_accesses');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'instructor_name');
+    }
+    
+
     public static function validateRules()
     {
+        //dimensions:min_width:300,min_height:300   =====> in Image validation
         return [
             'name' => 'required|max:255',
             'instructor_name' => 'required|max:255',
             'description' => 'nullable',
-            'image' => 'nullable|image|dimensions:min_width:300,min_height:300',
+            'image' => 'nullable|image',
             'price' => 'nullable|numeric|min:0',
             'sku' => 'nullable|unique:products,sku',
             'status' => 'in:' . self::STATUS_ACTIVE . ',' . self::STATUS_DISABLED,
@@ -53,6 +73,15 @@ class Course extends Model
         return asset('uploads/' . $this->image_path);
     }
 
+    // public function CourseAccessUsers()
+    // {
+    //     return $this->hasManyThrough(
+    //         User::class,
+    //         CourseAccess::class,
+    //         'course_id',
+    //         'id');
+    // }
+    
     // Mutators: set{AttributeName}Attribute
     public function setNameAttribute($value)
     {
@@ -64,4 +93,27 @@ class Course extends Model
         // initialize the slug column from here
         $this->attributes['slug'] = Str::slug($value);
     }
+
+    //------------------------------------------------ SEARCH --------------------------------------------------------
+
+
+    public function scopeFilter($query, array $filters){
+        $query->when($filters['search'] ?? false, function ($query, $search){
+            $query->where(function($query) use ($search) {
+                $query
+                    ->where('name', 'like', '%' . $search . '%');
+            });
+        });
+        $query->when($filters['doctor'] ?? false, function ($query, $doctor){
+            $query->wherehas('doctor', function ($query) use ($doctor) {
+                $query->where('instructor_name', $doctor);
+            });
+        });
+        $query->when($filters['course_year'] ?? false, function($query, $course_year){
+            $query->where('course_year', $course_year);
+            });
+        
+    }
+
+   
 }

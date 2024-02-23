@@ -867,7 +867,7 @@
     color: #9804e1;
 }
 /* Dropdown */
-.dropdown-menu > li > a{
+.dropdown-menu > li > a:hover{
 	padding:10px 20px;
 }
 /* Box Shadow */

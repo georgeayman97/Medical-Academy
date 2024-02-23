@@ -17,6 +17,7 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body>
+    <input type="hidden" name="url" value="Made by Eng.George Ayman & Eng.Zakaria Hamdan">
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>

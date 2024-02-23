@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('course_id')->constrained('courses')->restrictOnDelete();
-            $table->enum('status', [CourseAccess::STATUS_REQUEST, CourseAccess::STATUS_ACTIVE, CourseAccess::STATUS_DISABLED])->default(CourseAccess::STATUS_REQUEST);
+            $table->enum('status', [CourseAccess::STATUS_REQUEST, CourseAccess::STATUS_ENROLLED, CourseAccess::STATUS_DISABLED])->default(CourseAccess::STATUS_REQUEST);
             $table->timestamps();
         });
     }
