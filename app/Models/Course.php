@@ -10,7 +10,7 @@ class Course extends Model
 {
     const STATUS_ACTIVE = 'active';
     const STATUS_DISABLED = 'disabled';
-    
+
     use HasFactory;
 
     protected $fillable = [
@@ -44,7 +44,7 @@ class Course extends Model
     {
         return $this->belongsTo(User::class, 'instructor_name');
     }
-    
+
 
     public static function validateRules()
     {
@@ -65,7 +65,7 @@ class Course extends Model
         if(!$this->image_path){
             return asset('images/placeholder.png');
         }
-        // if the image is link 
+        // if the image is link
         if(stripos($this->image_path, 'http') === 0){
             return $this->image_path;
         }
@@ -81,7 +81,7 @@ class Course extends Model
     //         'course_id',
     //         'id');
     // }
-    
+
     // Mutators: set{AttributeName}Attribute
     public function setNameAttribute($value)
     {
@@ -112,8 +112,12 @@ class Course extends Model
         $query->when($filters['course_year'] ?? false, function($query, $course_year){
             $query->where('course_year', $course_year);
             });
-        
+
     }
 
-   
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
+
 }

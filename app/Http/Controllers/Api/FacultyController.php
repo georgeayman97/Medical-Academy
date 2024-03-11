@@ -21,7 +21,7 @@ class FacultyController extends Controller
     public function index()
     {
         $faculties = Faculty::select('id','name','years')->get();
-        
+
         return response()->json([
             'faculties' => $faculties,
         ], 200);
@@ -32,8 +32,11 @@ class FacultyController extends Controller
         $user = Auth::guard('sanctum')->user();
         // $userCourses = CourseAccess::with('course')->where('user_id',$user->id)->get();
         $userCourses = CourseAccess::whereHas('course', function ($query) {
-            return $query->where('status',Course::STATUS_ACTIVE);
-        })->where('user_id',$user->id)->get();
+            $query->where('status', Course::STATUS_ACTIVE)
+                ->whereHas('subject', function ($subQuery) {
+                    $subQuery->where('status', Subject::STATUS_ACTIVE);
+                });
+        })->where('user_id', $user->id)->get();
         foreach($userCourses as $course){
             $course->course->subject_id = (int)$course->course->subject_id;
             $course->course->instructor_name = User::where('id',$course->course->instructor_name)->pluck('name')->first();
@@ -53,7 +56,7 @@ class FacultyController extends Controller
     {
         $user = Auth::guard('sanctum')->user();
         $faculties = Faculty::select('years')->where('id',$user->faculty_id)->get();
-        
+
         return response()->json([
             'faculties' => $faculties,
         ], 200);
@@ -62,7 +65,7 @@ class FacultyController extends Controller
     public function facultySubjects(Request $request)
     {
         $user = Auth::guard('sanctum')->user();
-        $subjects = Subject::select('id','name','description','image_path','year')->where('faculty_id',$user->faculty_id)->where('year',$request->year)->get();
+        $subjects = Subject::select('id','name','description','image_path','year')->where('faculty_id',$user->faculty_id)->where('year',$request->year)->where('status',Subject::STATUS_ACTIVE)->get();
         foreach($subjects as $subject){
             $subject->setAttribute('courses_number', Course::where('subject_id',$subject->id)->count());
             if($subject->image_path != null)
@@ -72,7 +75,7 @@ class FacultyController extends Controller
             'subjects' => $subjects,
         ], 200);
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
