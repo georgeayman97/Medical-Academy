@@ -130,6 +130,8 @@
                             <ul class="sub-menu">
                                 <li><a href="{{ route('subjects.index') }}">All Subjects</a></li>
                                 <li><a href="{{ route('subjects.create') }}">Add Subject</a></li>
+                                <li><a href="{{ route('subjects.disabled') }}">Subjects Disabled</a></li>
+                                <li><a href="{{ route('subjects.active') }}">Subjects Active</a></li>
                             </ul>
                         </div>
                     </li>

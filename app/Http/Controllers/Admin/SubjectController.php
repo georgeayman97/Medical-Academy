@@ -23,6 +23,28 @@ class SubjectController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function active()
+    {
+        $subjects  = Subject::query()->where('status',Subject::STATUS_ACTIVE)->get();
+        return view('admin.subjects.index',['subjects' => $subjects]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function disabled()
+    {
+        $subjects  = Subject::query()->where('status',Subject::STATUS_DISABLED)->get();
+        return view('admin.subjects.index',['subjects' => $subjects]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +52,7 @@ class SubjectController extends Controller
     public function create()
     {
         $subject = new Subject();
-        
+
         $faculties = Faculty::all();
         return view('admin.subjects.create',compact('subject','faculties'));
     }
@@ -44,13 +66,13 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         //
-        
+
         if($request->hasFile('image')){
             $file = $request->file('image'); // upload file opject
             // $file->getClientOriginalName(); // returns file name
             $filename= date('YmdHi').$file->getClientOriginalName();
             $file->move(public_path('uploads'), $filename);
-           
+
             /* File system Disks (config/filesystem)
              local: storage/app
              public: storage/app/public
@@ -59,7 +81,7 @@ class SubjectController extends Controller
              $request->merge([
                 'image_path' => $filename,
             ]);
-            
+
         }
         else
         {
@@ -113,18 +135,18 @@ class SubjectController extends Controller
     {
         $subject = Subject::findOrFail($id);
         $request->validate(Subject::validateRules());
-        
+
         if($request->hasFile('image')){
             $file = $request->file('image'); // upload file opject
             // $file->getClientOriginalName(); // returns file name
             $filename= date('YmdHi').$file->getClientOriginalName();
             $file->move(public_path('uploads'), $filename);
-           
+
              $request->merge([
                 'image_path' => $filename,
             ]);
         }
-        
+
         $subject->update($request->all());
         return redirect()->route('dashboard')->with('success',"$subject->name Updated Successfully");
     }
@@ -135,6 +157,22 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function changeStatus($id)
+    {
+        if (!$id)
+            abort(404);
+
+        $subject = Subject::find($id);
+        if ($subject->status == 'active') {
+            $subject->status = 'disabled';
+            $subject->save();
+        } elseif ($subject->status == 'disabled') {
+            $subject->status = 'active';
+            $subject->save();
+        }
+        return redirect()->back();
+    }
     public function destroy($id)
     {
         $subject = Subject::findOrFail($id);

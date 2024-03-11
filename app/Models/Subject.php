@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
+    const STATUS_ACTIVE = 'active';
+    const STATUS_DISABLED = 'disabled';
+
     use HasFactory;
     public $timestamps = false;
 
@@ -26,7 +29,7 @@ class Subject extends Model
             'image_path' => 'nullable|image',
             'description' => 'nullable',
             'faculty_id' => 'required|int|exists:faculty,id'
-            
+
         ];
     }
 

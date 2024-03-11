@@ -24,11 +24,13 @@
                                 <table class="table">
                                 <thead>
                                     <tr>
-                                        
-                                        
+
+
                                         <th class="text-center">ID</th>
                                         <th class="text-center">NAME</th>
+                                        <th class="text-center">STATUS</th>
                                         <th class="text-center">DESCRIPTION</th>
+                                        <th class="text-center">Action</th>
                                         <th class="text-center">EDIT</th>
                                         <th class="text-center">DELETE</th>
                                     </tr>
@@ -38,10 +40,20 @@
                                     <!-- php// foreach($categories as $category) : // : istead of '{'  -->
                                         @foreach($subjects as $subject)
                                     <tr>
-                                        
+
                                         <td class="text-center">{{ $subject->id }}</td>
                                         <td class="text-center">{{ $subject->name }}</td>
+                                        @if($subject->status == "active")
+                                            <td class="btn button-md green radius-xl text-center" style="margin-top: 4px;">{{ $subject->status }}</td>
+                                        @else
+                                            <td class="btn button-md red radius-xl text-center" style="margin-top: 4px;">{{ $subject->status }}</td>
+                                        @endif
                                         <td class="text-center">{{ $subject->description }}</td>
+                                        @if($subject->status == 'active')
+                                            <td><a href="{{ route('subjects.changeStatus', $subject->id)}}" class="btn btn-sm btn-dark">Disable</a></td>
+                                        @else
+                                            <td><a href="{{ route('subjects.changeStatus', $subject->id)}}" class="btn btn-sm btn-dark">Activate</a></td>
+                                        @endif
                                         <td class="text-center"><a style="height:3.5em; width: 5em;" class="uren-add_cart" href="{{ route('subjects.edit', $subject->id)}}" data-toggle="tooltip" data-placement="top" title="Edit Subject"><i
                                                             class="fa fa-edit"> Edit</i></a>
                                         </td>

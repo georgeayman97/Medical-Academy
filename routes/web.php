@@ -77,6 +77,9 @@ Route::middleware('auth')->group(function(){
     //-------------------------------------------------------- ADD TO USER TRACKING -----------------------------------------------
     Route::get('admin/request/courseaccess/{user_id}/{course_id}/counter',[UserTrackingController::class,'showcounter'])->name('usertracking.counter');
     Route::resource('/admin/subjects',SubjectController::class);
+    Route::get('admin/subjects/changeStatus/{id}',[SubjectController::class,'changeStatus'])->name('subjects.changeStatus');
+    Route::get('admin/active/subjects',[SubjectController::class,'active'])->name('subjects.active');
+    Route::get('admin/disabled/subjects',[SubjectController::class,'disabled'])->name('subjects.disabled');
     Route::resource('/admin/faculty',FacultyController::class);
     Route::get('admin/student/forgetpass',[RegisteredUserController::class,'showForgetPass'])->name('forget.pass');
     Route::get('export/enrolledUsers',[CourseAccessController::class,'export'])->name('export.enrolled');
