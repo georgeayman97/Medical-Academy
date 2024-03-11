@@ -16,10 +16,10 @@ class AccountsController extends Controller
     public function index()
     {
         $requestedAccounts = User::all()->where('status','=','request');
-        
+
         return view('admin.accounts.allAccounts',[
             'reqs' => $requestedAccounts,
-            
+
         ]);
     }
     /**
@@ -29,7 +29,7 @@ class AccountsController extends Controller
      */
     public function accountsDeleted()
     {
-        $users = User::onlyTrashed()->orderBy('created_at','desc')->with('faculty')->paginate(20);
+        $users = User::onlyTrashed()->orderBy('created_at','desc')->with('faculty')->get();
         $success = session()->get('success');
         return view('admin.accounts.deleted_accounts',[
             'users' => $users,
@@ -42,7 +42,7 @@ class AccountsController extends Controller
         User::onlyTrashed()->where('id', $id)->restore();
 
         return redirect()->route('req.index')->with('success',"Account Restored Successfully");
-        
+
     }
 
     /**

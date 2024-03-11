@@ -49,6 +49,7 @@
                                     <th>STATUS</th>
                                     <th>ENROLLMENT DATE</th>
                                     <th>VIEWS</th>
+                                    <th>EDIT</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -61,7 +62,7 @@
                                 <tr>
                                     <td><input type="checkbox" name="users[]" value="{{ $enroll->id }}"></td>
                                     </form>
-                                    <td>{{ $enroll->user->name }}</td>
+                                    <td><a href="{{ route('courses.enrolled', $enroll->user->id)}}">{{ $enroll->user->name }}</a></td>
                                     <td>{{ $enroll->user->email }}</td>
                                     <td>{{ $enroll->user->mobile }}</td>
                                     @if($enroll->status == 'enrolled')
@@ -71,6 +72,12 @@
                                     @endif
                                     <td>{{ $enroll->updated_at }}</td>
                                     <td>{{ $usersviews[$enroll->user->id] ?? 0}}</td>
+                                    <td><a style="height:3.5em; width: 5em;" class="uren-add_cart"
+                                                               href="{{ route('accounts.edit', $enroll->user->id)}}"
+                                                               data-toggle="tooltip" data-placement="top"
+                                                               title="Edit User"><i
+                                                class="fa fa-edit"> Edit</i></a>
+                                    </td>
                                     @if($enroll->status == 'enrolled')
                                     <td>
                                         <form action="{{ route('accounts.disable', $enroll->id)}}" method="get">

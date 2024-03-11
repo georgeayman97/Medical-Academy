@@ -71,12 +71,15 @@ class SessionController extends Controller
         $request->merge([
             'slug' => Str::slug($request->name),
         ]);
+        if (!$request->filled('session_link')) {
+            $request->merge(['session_link' => '21fa46eed9544981b67d2d2b4413b170']);
+        }
 
         $session = Session::create($request->except('pdf'));
-        if($request->hasFile('pdf')){
-            $path = date('YmdHi').$request->file('pdf')->getClientOriginalName();
-            $request->pdf->move(public_path('pdf'), $path);
-            $session->update(['pdf'=>$path]);
+        if ($request->hasFile('pdf')) {
+            $fileName = time() . '_' . $request->file('pdf')->getClientOriginalName(); // Use unique file name
+            $request->file('pdf')->move(public_path('pdf'), $fileName);
+            $session->update(['pdf' => $fileName]); // Update with the generated file name
         }
         return redirect(route('sessions.show',['session'=>$request->course_id]));
     }
@@ -143,9 +146,16 @@ class SessionController extends Controller
         $session = Session::findOrFail($id);
         $request->validate(Session::validateRules($session));
 
-        //here we will handle the file to store it in a place
-//        $url = $request->input('url');
-        $session->update($request->all());
+        if ($request->hasFile('pdf')) {
+            $fileName = time() . '_' . $request->file('pdf')->getClientOriginalName();
+            $request->file('pdf')->move(public_path('pdf'), $fileName);
+            $session->update(['pdf' => $fileName]);
+        }
+        if (!$request->filled('session_link')) {
+            $request->merge(['session_link' => '21fa46eed9544981b67d2d2b4413b170']);
+        }
+
+        $session->update($request->except('pdf'));
 //        return redirect($url)->with('success',"$session->name Updated Successfully");
         return redirect(route('sessions.show',['session'=>$request->course_id]));
     }

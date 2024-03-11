@@ -22,7 +22,7 @@ class SessionsAccessController extends Controller
         $user = Auth::guard('sanctum')->user();
         $session = Session::findOrFail($request->sessions_id);
         if($session->pdf != null){
-            $session->pdf = 'http://medicalonlineacademy.com/pdf/'.$session->pdf;
+            $session->pdf = asset('pdf/' . $session->pdf);
         }
         $enrolled = CourseAccess::where('user_id',$user->id)->where('course_id',$request->courses_id)->get()->pluck('status')->contains('enrolled');
         if($enrolled){
@@ -36,7 +36,7 @@ class SessionsAccessController extends Controller
                 UserTracking::create([
                 'user_id' => $user->id,
                 'course_id' => $request->courses_id,
-                'watching_counter' => 1 
+                'watching_counter' => 1
                 ]);
             }
 
@@ -70,15 +70,15 @@ class SessionsAccessController extends Controller
 
             $response = curl_exec($curl);
             $err = curl_error($curl);
-            
+
             curl_close($curl);
 
             if ($err) {
             echo "cURL Error #:" . $err;
-            } 
-            
+            }
+
             $temp = explode('","', $response);
-            
+
             $otp = explode('":"', $temp[0]);
             $otp = $otp[1];
             $playbackInfo = explode('":"', $temp[1]);
@@ -88,7 +88,7 @@ class SessionsAccessController extends Controller
             $session->setAttribute('playbackInfo', $playbackInfo);
             $session->course_id = (int)$session->course_id;
 
-            
+
             return Response::json([
                 'session' => $session
             ], 200);

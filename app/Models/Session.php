@@ -26,7 +26,7 @@ class Session extends Model
         $id = $session == null ? null : $session->id;
         $rules = [
             'name' => 'required|max:255',
-            'session_link' => 'required|max:255',
+            'session_link' => 'nullable|max:255',
             'description' => 'nullable',
             'course_id' => 'required|int|exists:courses,id',
             'order' => [
